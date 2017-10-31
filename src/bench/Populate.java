@@ -110,10 +110,14 @@ public class Populate {
     public static void insertProducts() {
 
         StringBuilder query = new StringBuilder();
+        Random rand = new Random();
 
         for(int i = 0; i < PRODUCTS; i++) {
             PreparedStatement ps;
-            /* Needs to change, attributes changed */
+            int min = rand.nextInt(3);
+            int max = rand.nextInt(3);
+            int stock = rand.nextInt(/*entre min e max*/3);
+
             query.setLength(0);
             query.append("INSERT INTO product");
             query.append("(product_desc) VALUES");
@@ -130,34 +134,7 @@ public class Populate {
         }
 
     }
-
-    public static void insertInvoices() {
-
-        StringBuilder query = new StringBuilder();
-        Random rand         = new Random();
-
-        for(int i = 0; i < INVOICES; i++) {
-            PreparedStatement ps;
-            int client  = rand.nextInt(CLIENTS  + 1);
-            int product = rand.nextInt(PRODUCTS + 1);
-
-            query.setLength(0);
-            query.append("INSERT INTO invoice");
-            query.append("(client_id, product_id)");
-            query.append("VALUES(?,?);");
-
-            try {
-                ps = db.prepareStatement(query.toString());
-                ps.setInt(1, client);
-                ps.setInt(2, product);
-                ps.executeUpdate();
-            } catch (SQLException e) {
-                System.out.println("Error: failed to add invoice");
-                System.exit(5);
-            }
-        }
-    }
-
+    
     public static void main(String[] args) {
 
         /* Initialize connection */
@@ -176,7 +153,6 @@ public class Populate {
         createTables();
         insertClients();
         insertProducts();
-        //insertInvoices();
 
         /* Close connection */
         try {
