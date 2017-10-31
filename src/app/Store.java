@@ -14,7 +14,7 @@ public class Store {
 
     public Store() {
 
-        /*  Load driver class */
+        /* Load driver class */
         try {
             Class.forName("org.postgresql.Driver");
         } catch (ClassNotFoundException e) {
@@ -25,6 +25,16 @@ public class Store {
     private boolean openConnection() {
         try {
             db = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+            db.setAutoCommit(false);
+
+            /* it will be necessary:
+            * s.execute(...)
+            * .....
+            * c.commit();
+            * or
+            * c.rollback();
+            * */
+
         } catch (SQLException e) {
             return false;
         }
@@ -73,9 +83,9 @@ public class Store {
         ResultSet rs = null;
 
         if(openConnection()) {
-            query.append("SELECT product.product_id, product_desc ");
+            query.append("SELECT product.id, product_desc ");
             query.append("FROM invoice JOIN product ");
-            query.append("ON invoice.product_id=product.product_id ");
+            query.append("ON invoice.product_id=product.id ");
             query.append("WHERE invoice.client_id=?;");
             try {
                 ps = db.prepareStatement(query.toString());
@@ -87,7 +97,7 @@ public class Store {
                     int prodId;
 
                     prodDesc = rs.getString("product_desc");
-                    prodId   = rs.getInt("product_id");
+                    prodId   = rs.getInt("id");
 
                     products.add("Id: " + prodId + " Desc: " + prodDesc);
                 }

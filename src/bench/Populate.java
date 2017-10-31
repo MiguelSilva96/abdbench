@@ -27,7 +27,7 @@ public class Populate {
         try {
             /* Create client table */
             query.append("CREATE TABLE client(");
-            query.append("client_id serial NOT NULL,");
+            query.append("id serial NOT NULL,");
             query.append("client_name varchar(32) NOT NULL,");
             query.append("client_addr text NOT NULL);");
 
@@ -37,8 +37,10 @@ public class Populate {
             /* Create product table */
             query.setLength(0);
             query.append("CREATE TABLE product(");
-            query.append("product_id serial NOT NULL,");
-            query.append("product_desc varchar(32) NOT NULL);");
+            query.append("id serial NOT NULL,");
+            query.append("stock integer NOT NULL,");
+            query.append("min integer NOT NULL,max integer NOT NULL,");
+            query.append("desc varchar(32) NOT NULL);");
 
             ps = db.prepareStatement(query.toString());
             ps.executeUpdate();
@@ -46,8 +48,28 @@ public class Populate {
             /* Create invoice table */
             query.setLength(0);
             query.append("CREATE TABLE invoice(");
-            query.append("invoice_id serial NOT NULL,");
-            query.append("client_id integer NOT NULL,");
+            query.append("id serial NOT NULL,");
+            query.append("client_id integer NOT NULL);");
+
+            ps = db.prepareStatement(query.toString());
+            ps.executeUpdate();
+
+            /* Create invoiceLine table */
+            query.setLength(0);
+            query.append("CREATE TABLE invoiceLine(");
+            query.append("id serial NOT NULL,");
+            query.append("invoice_id integer NOT NULL,");
+            query.append("product_id integer NOT NULL);");
+
+            ps = db.prepareStatement(query.toString());
+            ps.executeUpdate();
+
+            /* Create order table */
+            query.setLength(0);
+            query.append("CREATE TABLE orderT(");
+            query.append("id serial NOT NULL,");
+            query.append("supplier integer NOT NULL,");
+            query.append("items integer NOT NULL,");
             query.append("product_id integer NOT NULL);");
 
             ps = db.prepareStatement(query.toString());
@@ -91,7 +113,7 @@ public class Populate {
 
         for(int i = 0; i < PRODUCTS; i++) {
             PreparedStatement ps;
-
+            /* Needs to change, attributes changed */
             query.setLength(0);
             query.append("INSERT INTO product");
             query.append("(product_desc) VALUES");
