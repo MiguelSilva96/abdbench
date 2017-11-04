@@ -58,10 +58,8 @@ public class WorkloadGen extends Thread {
 
 
         while(running) {
-            productId = rand.nextInt(Populate.PRODUCTS)|
-                        rand.nextInt(Populate.PRODUCTS);
-            clientId  = rand.nextInt(Populate.CLIENTS)|
-                        rand.nextInt(Populate.CLIENTS);
+            productId = rand.nextInt(Populate.PRODUCTS);
+            clientId  = rand.nextInt(Populate.CLIENTS);
 
             query = rand.nextInt(3);
 
@@ -80,7 +78,7 @@ public class WorkloadGen extends Thread {
         store.closeConnection();
     }
 
-    public static void clearInvoices() {
+    private static void clearInvoices() {
         Connection db;
         String query;
         PreparedStatement ps;
@@ -118,6 +116,10 @@ public class WorkloadGen extends Thread {
                 workers[i].join();
             }
             clearInvoices();
+            //reset bench variables
+            ultima = -1;
+            iaa = 0; tra = 0; c = 0;
+            start = false;
         }
 
         System.exit(0);

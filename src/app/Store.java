@@ -96,9 +96,10 @@ public class Store {
         PreparedStatement ps = null;
         ResultSet rs = null;
 
-        query.append("SELECT product_id, count ");
-        query.append("FROM step2 ");
-        query.append("ORDER BY count DESC LIMIT 10;");
+        query.append("SELECT product_id, count(*) AS total ");
+        query.append("FROM invoice ");
+        query.append("GROUP BY product_id ");
+        query.append("ORDER BY total DESC LIMIT 10;");
 
         try {
             ps = db.prepareStatement(query.toString());
@@ -109,7 +110,7 @@ public class Store {
                 int quantity;
 
                 prodId   = rs.getInt("product_id");
-                quantity = rs.getInt("count");
+                quantity = rs.getInt("total");
 
                 products.add(" Quantity: " + quantity + " Desc: " + prodId);
             }
