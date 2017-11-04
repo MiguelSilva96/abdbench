@@ -77,6 +77,7 @@ public class WorkloadGen extends Thread {
             regista(antes, depois);
 
         }
+        store.closeConnection();
     }
 
     public static void clearInvoices() {
