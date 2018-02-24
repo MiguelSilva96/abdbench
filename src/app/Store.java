@@ -71,19 +71,13 @@ public class Store {
             query.setLength(0);
             db.commit();
         } catch (SQLException e) {
-            //There's nothing to do about it
-            //So we throw unchecked exception
-            //e.printStackTrace();
-            //throw new RuntimeException();
             try {
                 System.out.println(e.getMessage());
                 db.rollback();
                 WorkloadGen.newRollback();
             } catch (SQLException ex) {
                 //There's nothing to do about it
-                //So we throw unchecked exception
                 ex.printStackTrace();
-                throw new RuntimeException();
             }
         }
     }
@@ -119,9 +113,7 @@ public class Store {
                 WorkloadGen.newRollback();
             } catch (SQLException ex) {
                 //There's nothing to do about it
-                //So we throw unchecked exception
                 ex.printStackTrace();
-                throw new RuntimeException();
             }
         }
 
@@ -160,9 +152,7 @@ public class Store {
                 WorkloadGen.newRollback();
             } catch (SQLException ex) {
                 //There's nothing to do about it
-                //So we throw unchecked exception
                 ex.printStackTrace();
-                throw new RuntimeException();
             }
         }
         return products;
@@ -211,9 +201,7 @@ public class Store {
                 WorkloadGen.newRollback();
             } catch (SQLException ex) {
                 //There's nothing to do about it
-                //So we throw unchecked exception
                 ex.printStackTrace();
-                throw new RuntimeException();
             }
         }
     }
@@ -247,9 +235,7 @@ public class Store {
                 WorkloadGen.newRollback();
             } catch (SQLException ex) {
                 //There's nothing to do about it
-                //So we throw unchecked exception
                 ex.printStackTrace();
-                throw new RuntimeException();
             }
         }
 
