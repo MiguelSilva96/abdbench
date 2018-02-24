@@ -51,9 +51,7 @@ public class Store {
             ps.executeUpdate();
         } catch (SQLException e) {
             //There's nothing to do about it
-            //So we throw unchecked exception
             e.printStackTrace();
-            throw new RuntimeException();
         }
     }
 
@@ -82,9 +80,7 @@ public class Store {
             }
         } catch (SQLException e) {
             //There's nothing to do about it
-            //So we throw unchecked exception
             e.printStackTrace();
-            throw new RuntimeException();
         }
 
         return products;
@@ -116,9 +112,7 @@ public class Store {
             }
         } catch (SQLException e) {
             //There's nothing to do about it
-            //So we throw unchecked exception
             e.printStackTrace();
-            throw new RuntimeException();
         }
 
         return products;
