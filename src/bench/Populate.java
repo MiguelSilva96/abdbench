@@ -15,7 +15,6 @@ public class Populate {
     private static final String PASSWORD = "";
     public  static final int    CLIENTS  = 1024;
     public  static final int    PRODUCTS = 4096;
-    public  static final int    INVOICES = 8192;
 
     private static Connection db;
 
@@ -27,7 +26,7 @@ public class Populate {
         try {
             /* Create client table */
             query.append("CREATE TABLE client(");
-            query.append("id serial NOT NULL,");
+            query.append("id integer NOT NULL,");
             query.append("client_name varchar(32) NOT NULL,");
             query.append("client_addr text NOT NULL);");
 
@@ -37,10 +36,10 @@ public class Populate {
             /* Create product table */
             query.setLength(0);
             query.append("CREATE TABLE product(");
-            query.append("id serial NOT NULL,");
+            query.append("id integer NOT NULL,");
             query.append("stock integer NOT NULL,");
             query.append("min integer NOT NULL,max integer NOT NULL,");
-            query.append("desc varchar(32) NOT NULL);");
+            query.append("p_desc varchar(32) NOT NULL);");
 
             ps = db.prepareStatement(query.toString());
             ps.executeUpdate();
@@ -48,7 +47,7 @@ public class Populate {
             /* Create invoice table */
             query.setLength(0);
             query.append("CREATE TABLE invoice(");
-            query.append("id serial NOT NULL,");
+            query.append("id integer NOT NULL,");
             query.append("client_id integer NOT NULL);");
 
             ps = db.prepareStatement(query.toString());
@@ -57,7 +56,7 @@ public class Populate {
             /* Create invoiceLine table */
             query.setLength(0);
             query.append("CREATE TABLE invoiceLine(");
-            query.append("id serial NOT NULL,");
+            query.append("id integer NOT NULL,");
             query.append("invoice_id integer NOT NULL,");
             query.append("product_id integer NOT NULL);");
 
@@ -67,7 +66,7 @@ public class Populate {
             /* Create order table */
             query.setLength(0);
             query.append("CREATE TABLE orderT(");
-            query.append("id serial NOT NULL,");
+            query.append("id integer NOT NULL,");
             query.append("supplier integer NOT NULL,");
             query.append("items integer NOT NULL,");
             query.append("product_id integer NOT NULL);");
@@ -84,14 +83,13 @@ public class Populate {
     public static void insertClients() {
 
         StringBuilder query = new StringBuilder();
-
         for(int i = 0; i < CLIENTS; i++) {
             PreparedStatement ps;
 
             query.setLength(0);
             query.append("INSERT INTO client");
-            query.append("(client_name, client_addr)");
-            query.append("VALUES(");
+            query.append("(id, client_name, client_addr)");
+            query.append("VALUES(").append(i).append(",");
             query.append("'client").append(i);
             query.append("','address").append(i);
             query.append("');");
@@ -114,15 +112,17 @@ public class Populate {
 
         for(int i = 0; i < PRODUCTS; i++) {
             PreparedStatement ps;
-            int min = rand.nextInt(3);
-            int max = rand.nextInt(3);
-            int stock = rand.nextInt(/*entre min e max*/3);
+            int min = rand.nextInt(512);
+            int max = rand.nextInt(1024) + min;
+            int stock = rand.nextInt((max - min) + 1) + min;
 
             query.setLength(0);
             query.append("INSERT INTO product");
-            query.append("(product_desc) VALUES");
-            query.append("('product").append(i);
-            query.append("');");
+            query.append("(id, stock, min, max, p_desc) VALUES");
+            query.append("(").append(i).append(",");
+            query.append(stock).append(",").append(min);
+            query.append(",").append(max).append(",");
+            query.append("'product").append(i).append("');");
 
             try {
                 ps = db.prepareStatement(query.toString());
@@ -195,5 +195,23 @@ SE ESTIVER A CORRER -p 12345
 
     ps.setInt(1, x);
     ps.setDouble(2, y);---
+
+    Link para obter generated keys:
+    https://stackoverflow.com/questions/1915166/how-to-get-the-insert-id-in-jdbc
+
+    Directoria dos logs transacionais e de erro etc
+
+    dados/
+        pg_xlog/ -> WAL log
+        pg_log/ -> msgs...
+   ____________________
+   postgresql.conf
+    log_checkpoints = on
+        aparece no log me mensagens informaçao
+        sobre os checkpoints
+
+   mudanças para checkpoint_timeout
+   default: 5min
+   testes: 30s
 
 */

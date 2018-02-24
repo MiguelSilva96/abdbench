@@ -6,14 +6,28 @@ import app.Store;
 import java.util.Random;
 
 public class WorkloadGen extends Thread {
+    /*Just for testing without serial*/
+    private static int invoiceId = 0;
+    private static int invoiceLineId = 0;
+    private static int orderId = 0;
+    /*********************************/
+    private static int rollbacks = 0;
 
     private static long ultima = -1;
 
     private static long iaa = 0, tra = 0, c = 0;
     private static boolean start = false;
 
-    private static synchronized void regista(long antes, long depois) {
+    public synchronized static void newRollback() { rollbacks++; }
+    public synchronized static int getInvoiceId() {
+        return invoiceId++;
+    }
+    public synchronized static int getInvoiceLineId() {
+        return invoiceLineId++;
+    }
+    public synchronized static int getOrderId() { return orderId++; }
 
+    private static synchronized void regista(long antes, long depois) {
 
         long tr = depois-antes;
 
@@ -35,6 +49,7 @@ public class WorkloadGen extends Thread {
         double debito = 1/((iaa/1e9d)/c);
 
         System.out.println("debito = "+debito+" tps, tr = "+trm+" s");
+        System.out.println(rollbacks/(double)c);
 
     }
 
